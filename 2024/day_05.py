@@ -1,6 +1,6 @@
 """Day 5"""
 
-from common import get_puzzle_input
+from common.common import get_puzzle_input
 
 PUZZLE_INPUT = get_puzzle_input()
 
