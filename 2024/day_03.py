@@ -2,7 +2,7 @@
 
 import re
 
-from common.common import get_puzzle_input
+from common import get_puzzle_input
 
 PUZZLE_INPUT = get_puzzle_input()
 
