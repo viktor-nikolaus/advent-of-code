@@ -1,7 +1,5 @@
 """Day 13"""
 
-from math import ceil, floor
-
 from common import get_puzzle_input
 
 PUZZLE_INPUT = get_puzzle_input()
