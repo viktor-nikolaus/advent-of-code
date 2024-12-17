@@ -18,14 +18,11 @@ def get_puzzle_sample_input(i) -> str:
         return file.read()
 
 
-def test_sample_input(i, expected_part_1, expected_part_2, part_1_processor, part_2_processor):
-    puzzle_sample_input = get_puzzle_sample_input(i)
-    result = part_1_processor(puzzle_sample_input)
-    success = expected_part_1 == result
-    print(f"Sample {i} Part 1: " + ("Correct" if success else f"Wrong\n  expected: {expected_part_1}\n  actual: {result}"))
-    result = part_2_processor(puzzle_sample_input)
-    success = expected_part_2 == result
-    print(f"Sample {i} Part 2: " + ("Correct" if success else f"Wrong\n  expected: {expected_part_2}\n  actual: {result}"))
+def test_sample_input(sample_i, part_i, expected, processor):
+    puzzle_sample_input = get_puzzle_sample_input(sample_i)
+    result = processor(puzzle_sample_input)
+    success = expected == result
+    print(f"Sample {sample_i} Part {part_i}: " + ("Correct" if success else f"Wrong\n  expected: {expected}\n  actual: {result}"))
 
 
 def parse_grid(string) -> list:
