@@ -11,6 +11,23 @@ def get_puzzle_input() -> str:
         return file.read()
 
 
+def get_puzzle_sample_input(i) -> str:
+    script_name = os.path.basename(sys.argv[0])
+    input_path = os.path.join(os.path.basename(os.path.dirname(sys.argv[0])), "inputs", script_name.partition(".")[0] + ".sample" + str(i) + ".txt")
+    with open(input_path, "r", encoding="utf-8") as file:
+        return file.read()
+
+
+def test_sample_input(i, expected_part_1, expected_part_2, part_1_processor, part_2_processor):
+    puzzle_sample_input = get_puzzle_sample_input(i)
+    result = part_1_processor(puzzle_sample_input)
+    success = expected_part_1 == result
+    print(f"Sample {i} Part 1: " + ("Correct" if success else f"Wrong\n  expected: {expected_part_1}\n  actual: {result}"))
+    result = part_2_processor(puzzle_sample_input)
+    success = expected_part_2 == result
+    print(f"Sample {i} Part 2: " + ("Correct" if success else f"Wrong\n  expected: {expected_part_2}\n  actual: {result}"))
+
+
 def parse_grid(string) -> list:
     return [list(l) for l in string.split("\n")]
 
@@ -31,3 +48,20 @@ def print_grid(grid, margin_x = 0) -> None:
             print((" " * (max_cell_length - len(c_str))) + c_str, end="")
         print()
     print()
+
+
+def iter_grid(grid):
+    for y, l in enumerate(grid):
+        for x, c in enumerate(l):
+            yield ((x, y), c)
+
+
+def grid_at(grid, pos):
+    if 0 <= pos[1] < len(grid) and 0 <= pos[0] < len(grid[0]):
+        return grid[pos[1]][pos[0]]
+    return None
+
+
+def grid_set(grid, pos, val):
+    if 0 <= pos[1] < len(grid) and 0 <= pos[0] < len(grid[0]):
+        grid[pos[1]][pos[0]] = val
