@@ -18,9 +18,9 @@ def get_puzzle_sample_input(i) -> str:
         return file.read()
 
 
-def test_sample_input(sample_i, part_i, expected, processor):
+def test_sample_input(sample_i, part_i, expected, processor, args=None):
     puzzle_sample_input = get_puzzle_sample_input(sample_i)
-    result = processor(puzzle_sample_input)
+    result = processor(puzzle_sample_input, *(args if args is not None else []))
     success = expected == result
     print(f"Sample {sample_i} Part {part_i}: " + ("Correct" if success else f"Wrong\n  expected: {expected}\n  actual: {result}"))
 
