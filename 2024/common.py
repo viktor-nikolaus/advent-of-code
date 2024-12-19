@@ -23,6 +23,7 @@ def test_sample_input(sample_i, part_i, expected, processor, args=None):
     result = processor(puzzle_sample_input, *(args if args is not None else []))
     success = expected == result
     print(f"Sample {sample_i} Part {part_i}: " + ("Correct" if success else f"Wrong\n  expected: {expected}\n  actual: {result}"))
+    return success
 
 
 def parse_grid(string) -> list:
