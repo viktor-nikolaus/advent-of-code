@@ -63,3 +63,27 @@ def grid_at(grid, pos):
 def grid_set(grid, pos, val):
     if 0 <= pos[1] < len(grid) and 0 <= pos[0] < len(grid[0]):
         grid[pos[1]][pos[0]] = val
+
+
+def solve_maze(grid, start):
+    maze = copy_grid(grid)
+    maze[start[1]][start[0]] = 0
+    queue = [start]
+    while len(queue) > 0:
+        x, y = queue.pop(0)
+        val = maze[y][x]
+        for n_x, n_y in [(x+dx, y+dy) for dx, dy in [(1, 0), (0, 1), (-1, 0), (0, -1)]]:
+            if 0 <= n_y < len(maze) and\
+                0 <= n_x < len(maze[0]):
+                n_val = maze[n_y][n_x]
+                if n_val == "#":
+                    continue
+                if n_val == ".":
+                    maze[n_y][n_x] = val + 1
+                    queue.append((n_x, n_y))
+                    continue
+                if isinstance(n_val, int) and int(n_val) > val + 1:
+                    maze[n_y][n_x] = val + 1
+                    queue.append((n_x, n_y))
+                    continue
+    return maze
