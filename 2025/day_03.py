@@ -28,12 +28,24 @@ def part_1(puzzle_input):
 
 
 def part_2(puzzle_input):
-    return 0
+    battery_banks = parse_input(puzzle_input)
+    result = 0
+    for bank in battery_banks:
+        while len(bank) > 12:
+            for i in range(len(bank) - 1):
+                if bank[i] < bank[i+1]:
+                    bank.pop(i)
+                    break
+            else:
+                bank.pop()
+        joltage = int("".join(str(b) for b in bank))
+        result += joltage
+    return result
 
 
 def test():
     part_1_sample_result = 357
-    part_2_sample_result = 0
+    part_2_sample_result = 3121910778619
     result = True
     result &= test_sample_input(1, 1, part_1_sample_result, part_1)
     result &= test_sample_input(1, 2, part_2_sample_result, part_2)
