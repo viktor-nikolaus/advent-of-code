@@ -21,33 +21,52 @@ DIRECTIONS = [(-1, -1), ( 0, -1), ( 1, -1),
               (-1,  1), ( 0,  1), ( 1,  1)]
 
 
-def part_1(puzzle_input):
-    puzzle_map = parse_input(puzzle_input)
-    counter_map = [[0 for _ in l] for l in puzzle_map]
+def update_counter_map(puzzle_map, counter_map):
     for y in range(len(puzzle_map)):
         for x in range(len(puzzle_map[y])):
             if puzzle_map[y][x] == "@":
                 for dx, dy in DIRECTIONS:
                     update_map(counter_map, x + dx, y + dy, lambda i: i + 1)
-    
+
+
+def count_and_remove(puzzle_map, counter_map):
     result = 0
     for y in range(len(puzzle_map)):
         for x in range(len(puzzle_map[y])):
             if puzzle_map[y][x] == "@" and counter_map[y][x] < 4:
                 result += 1
-    
+                puzzle_map[y][x] = "."
+    return result
+
+
+def part_1(puzzle_input):
+    puzzle_map = parse_input(puzzle_input)
+    counter_map = [[0 for _ in l] for l in puzzle_map]
+
+    update_counter_map(puzzle_map, counter_map)
+    result = count_and_remove(puzzle_map, counter_map)
+
     return result
 
 
 def part_2(puzzle_input):
     puzzle_map = parse_input(puzzle_input)
+
     result = 0
+    while True:
+        counter_map = [[0 for _ in l] for l in puzzle_map]
+        update_counter_map(puzzle_map, counter_map)
+        tmp = count_and_remove(puzzle_map, counter_map)
+        result += tmp
+        if tmp == 0:
+            break
+    
     return result
 
 
 def test():
     part_1_sample_result = 13
-    part_2_sample_result = 0
+    part_2_sample_result = 43
     result = True
     result &= test_sample_input(1, 1, part_1_sample_result, part_1)
     result &= test_sample_input(1, 2, part_2_sample_result, part_2)
