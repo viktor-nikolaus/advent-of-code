@@ -1,4 +1,4 @@
-"""Day 2"""
+"""Day 3"""
 
 from common import get_puzzle_input, test_sample_input
 
