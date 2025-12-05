@@ -22,16 +22,25 @@ def part_1(puzzle_input):
 
 
 def part_2(puzzle_input):
-    fresh_range, ingredient_ids = parse_input(puzzle_input)
-
-    result = 0
-
+    fresh_range, _ = parse_input(puzzle_input)
+    fresh_range = sorted(sorted(fresh_range, key=lambda r: r[1]), key=lambda r: r[0])
+    k = 1
+    while k < len(fresh_range):
+        if fresh_range[k][0] <= fresh_range[k-1][1]:
+            if fresh_range[k][1] <= fresh_range[k-1][1]:
+                fresh_range.pop(k)
+                continue
+            else:
+                fresh_range[k] = (fresh_range[k-1][1]+1, fresh_range[k][1])
+        k += 1
+    
+    result = sum(r[1] - r[0] + 1 for r in fresh_range)
     return result
 
 
 def test():
     part_1_sample_result = 3
-    part_2_sample_result = 0
+    part_2_sample_result = 14
     result = True
     result &= test_sample_input(1, 1, part_1_sample_result, part_1)
     result &= test_sample_input(1, 2, part_2_sample_result, part_2)
