@@ -38,17 +38,40 @@ def part_1(puzzle_input):
     return result
 
 
+def fill_beams_count(puzzle_input):
+    for y in range(len(puzzle_input)):
+        for x in range(len(puzzle_input[y])):
+            match puzzle_input[y][x]:
+                case "S":
+                    puzzle_input[y][x] = 1
+                case ".":
+                    puzzle_input[y][x] = 0
+            
+    for y in range(1, len(puzzle_input)):
+        width = len(puzzle_input[y])
+        for x in range(len(puzzle_input[y])):
+            if puzzle_input[y][x] == "^":
+                continue
+            v = puzzle_input[y-1][x]
+            if v == "^":
+                v = 0
+            if x > 0 and puzzle_input[y][x-1] == "^":
+                v += puzzle_input[y-1][x-1]
+            if x < width - 1 and puzzle_input[y][x+1] == "^":
+                v += puzzle_input[y-1][x+1]
+            puzzle_input[y][x] = v
+
+
 def part_2(puzzle_input):
     puzzle_input = parse_input(puzzle_input)
-
-    result = 0
-
+    fill_beams_count(puzzle_input)
+    result = sum(puzzle_input[-1])
     return result
 
 
 def test():
     part_1_sample_result = 21
-    part_2_sample_result = 0
+    part_2_sample_result = 40
     result = True
     result &= test_sample_input(1, 1, part_1_sample_result, part_1)
     result &= test_sample_input(1, 2, part_2_sample_result, part_2)
