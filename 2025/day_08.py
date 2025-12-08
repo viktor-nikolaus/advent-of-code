@@ -9,8 +9,7 @@ def parse_input(puzzle_input: str):
     return [tuple([int(i) for i in l.split(",")]) for l in puzzle_input.split("\n")]
 
 
-def part_1(puzzle_input, num_connections):
-    boxes = parse_input(puzzle_input)
+def get_sorted_distances(boxes):
     distances = {}
     for i in range(len(boxes)):
         for j in range(i + 1, len(boxes)):
@@ -22,23 +21,33 @@ def part_1(puzzle_input, num_connections):
                           + delta[1] * delta[1]
                           + delta[2] * delta[2])
     distances = sorted(distances.items(), key=lambda e: e[1])
+    return distances
+
+
+def connect_boxes(circuits, k):
+    cl = [c for c in circuits if k[0] in c or k[1] in c]
+    if len(cl) == 0:
+        c = set(k)
+        circuits.append(c)
+    elif len(cl) == 1:
+        c = cl[0]
+        c.add(k[0])
+        c.add(k[1])
+    else: # > 1
+        cn = set()
+        for c in cl:
+            circuits.remove(c)
+            cn = cn.union(c)
+        circuits.append(cn)
+
+
+def part_1(puzzle_input, num_connections):
+    boxes = parse_input(puzzle_input)
+    distances = get_sorted_distances(boxes)
     circuits = []
     n = 0
     for k, d in distances:
-        cl = [c for c in circuits if k[0] in c or k[1] in c]
-        if len(cl) == 0:
-            c = set(k)
-            circuits.append(c)
-        elif len(cl) == 1:
-            c = cl[0]
-            c.add(k[0])
-            c.add(k[1])
-        else: # > 1
-            cn = set()
-            for c in cl:
-                circuits.remove(c)
-                cn = cn.union(c)
-            circuits.append(cn)
+        connect_boxes(circuits, k)
         n += 1
         if n >= num_connections:
             break
@@ -51,16 +60,19 @@ def part_1(puzzle_input, num_connections):
 
 
 def part_2(puzzle_input):
-    puzzle_input = parse_input(puzzle_input)
-
-    result = 0
-
-    return result
+    boxes = parse_input(puzzle_input)
+    distances = get_sorted_distances(boxes)
+    circuits = []
+    for k, d in distances:
+        connect_boxes(circuits, k)
+        if len(circuits) == 1 and len(circuits[0]) == len(boxes):
+            return boxes[k[0]][0] * boxes[k[1]][0]
+    return -1
 
 
 def test():
     part_1_sample_result = 40
-    part_2_sample_result = 0
+    part_2_sample_result = 25272
     result = True
     result &= test_sample_input(1, 1, part_1_sample_result, part_1, [10])
     result &= test_sample_input(1, 2, part_2_sample_result, part_2)
